@@ -146,11 +146,11 @@ $sheet->getStyle('C4')->applyFromArray( $style_header );
 
 //datanya /////////////////////////////////////////////////////////////////////////////////////////////////
 //data 
-$qpel = mysql_query("SELECT * FROM m_guru  ".
+$qpel = mysqli_query($koneksi, "SELECT * FROM m_guru  ".
 						"WHERE kd_member = '$swkd' ". 
 						"ORDER BY round(kode) ASC");
-$rpel = mysql_fetch_assoc($qpel);
-$tpel = mysql_num_rows($qpel);
+$rpel = mysqli_fetch_assoc($qpel);
+$tpel = mysqli_num_rows($qpel);
 
 
 //netralkan dahulu
@@ -177,7 +177,7 @@ do
 	$sheet->getStyle('C'.$i_nox.'')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
 	$sheet->getStyle('C'.$i_nox.'')->applyFromArray( $style_data );
 	}
-while ($rpel = mysql_fetch_assoc($qpel));
+while ($rpel = mysqli_fetch_assoc($qpel));
 
 
 

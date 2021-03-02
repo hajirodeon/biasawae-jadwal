@@ -41,10 +41,10 @@ if ($s == "edit")
 	$kdx = nosql($_REQUEST['kd']);
 
 	//query
-	$qx = mysql_query("SELECT * FROM m_mapel ".
+	$qx = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 						"WHERE kd_member = '$kd9_session' ".
 						"AND kd = '$kdx'");
-	$rowx = mysql_fetch_assoc($qx);
+	$rowx = mysqli_fetch_assoc($qx);
 	$e_kode = balikin($rowx['kode']);
 	$e_mapel = balikin($rowx['mapel']);
 	}
@@ -77,11 +77,11 @@ if ($_POST['btnSMP'])
 		if (empty($s))
 			{
 			///cek
-			$qcc = mysql_query("SELECT * FROM m_mapel ".
+			$qcc = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 								"WHERE kd_member = '$kd9_session' ".
 								"AND kode = '$e_kode'");
-			$rcc = mysql_fetch_assoc($qcc);
-			$tcc = mysql_num_rows($qcc);
+			$rcc = mysqli_fetch_assoc($qcc);
+			$tcc = mysqli_num_rows($qcc);
 
 
 			//nek ada
@@ -95,7 +95,7 @@ if ($_POST['btnSMP'])
 			else
 				{
 				//insert
-				mysql_query("INSERT INTO m_mapel(kd, kd_member, kode, mapel, postdate) VALUES ".
+				mysqli_query($koneksi, "INSERT INTO m_mapel(kd, kd_member, kode, mapel, postdate) VALUES ".
 								"('$x', '$kd9_session', '$e_kode', '$e_mapel', '$today')");
 
 				//re-direct
@@ -109,7 +109,7 @@ if ($_POST['btnSMP'])
 		else if ($s == "edit")
 			{
 			//update
-			mysql_query("UPDATE m_mapel SET kode = '$e_kode', ".
+			mysqli_query($koneksi, "UPDATE m_mapel SET kode = '$e_kode', ".
 							"mapel = '$e_mapel' ".
 							"WHERE kd_member = '$kd9_session' ".
 							"AND kd = '$kd'");
@@ -140,7 +140,7 @@ if ($_POST['btnHPS'])
 		$kd = nosql($_POST["$yuhu"]);
 
 		//del
-		mysql_query("DELETE FROM m_mapel ".
+		mysqli_query($koneksi, "DELETE FROM m_mapel ".
 						"WHERE kd_member = '$kd9_session' ".
 						"AND kd = '$kd'");
 		}
@@ -212,21 +212,21 @@ Nama Mapel :
 
 
 //query
-$q1 = mysql_query("SELECT * FROM m_mapel ".
+$q1 = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 					"WHERE kd_member = '$kd9_session' ".
 					"ORDER BY round(kode) ASC");
-$row1 = mysql_fetch_assoc($q1);
-$total1 = mysql_num_rows($q1);
+$row1 = mysqli_fetch_assoc($q1);
+$total1 = mysqli_num_rows($q1);
 
 //jika null, sample aja...
 if (empty($total1))
 	{
 	//query
-	$q = mysql_query("SELECT * FROM m_mapel ".
+	$q = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 						"WHERE kd_member = '' ".
 						"ORDER BY round(kode) ASC");
-	$row = mysql_fetch_assoc($q);
-	$total = mysql_num_rows($q);
+	$row = mysqli_fetch_assoc($q);
+	$total = mysqli_num_rows($q);
 	
 
 	do {
@@ -237,22 +237,22 @@ if (empty($total1))
 		$i_pel = balikin($row['mapel']);
 		
 		//insert
-		mysql_query("INSERT INTO m_mapel(kd, kd_member, kode, mapel, postdate) VALUES ".
+		mysqli_query($koneksi, "INSERT INTO m_mapel(kd, kd_member, kode, mapel, postdate) VALUES ".
 						"('$kdx', '$kd9_session', '$i_kode', '$i_pel', '$today')");
 
 		}
-	while ($row = mysql_fetch_assoc($q));
+	while ($row = mysqli_fetch_assoc($q));
 	}
 
 
 
 
 //query
-$q = mysql_query("SELECT * FROM m_mapel ".
+$q = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 					"WHERE kd_member = '$kd9_session' ".
 					"ORDER BY round(kode) ASC");
-$row = mysql_fetch_assoc($q);
-$total = mysql_num_rows($q);
+$row = mysqli_fetch_assoc($q);
+$total = mysqli_num_rows($q);
 
 
 if ($total != 0)
@@ -287,7 +287,7 @@ if ($total != 0)
 		<td>'.$i_pel.'</td>
        	</tr>';
 		}
-	while ($row = mysql_fetch_assoc($q));
+	while ($row = mysqli_fetch_assoc($q));
 	}
 
 echo '</table>

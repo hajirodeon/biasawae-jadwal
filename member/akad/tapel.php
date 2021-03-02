@@ -42,10 +42,10 @@ if ($s == "edit")
 	$kdx = nosql($_REQUEST['kd']);
 
 	//query
-	$qx = mysql_query("SELECT * FROM m_tapel ".
+	$qx = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd_member = '$kd9_session' ".
 						"AND kd = '$kdx'");
-	$rowx = mysql_fetch_assoc($qx);
+	$rowx = mysqli_fetch_assoc($qx);
 	$tahun1 = nosql($rowx['tahun1']);
 	$tahun2 = nosql($rowx['tahun2']);
 	}
@@ -74,12 +74,12 @@ if ($_POST['btnSMP'])
 		}
 	else
 		{ //cek
-		$qcc = mysql_query("SELECT * FROM m_tapel ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 								"WHERE kd_member = '$kd9_session' ".
 								"AND tahun1 = '$tahun1' ".
 								"AND tahun2 = '$tahun2'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 
 		//nek ada
 		if ($tcc != 0)
@@ -95,7 +95,7 @@ if ($_POST['btnSMP'])
 			if (empty($s))
 				{
 				//query
-				mysql_query("INSERT INTO m_tapel(kd, kd_member, tahun1, tahun2, postdate) VALUES ".
+				mysqli_query($koneksi, "INSERT INTO m_tapel(kd, kd_member, tahun1, tahun2, postdate) VALUES ".
 								"('$x', '$kd9_session', '$tahun1', '$tahun2', '$today')");
 
 				//re-direct
@@ -107,7 +107,7 @@ if ($_POST['btnSMP'])
 			else if ($s == "edit")
 				{
 				//query
-				mysql_query("UPDATE m_tapel SET tahun1 = '$tahun1', ".
+				mysqli_query($koneksi, "UPDATE m_tapel SET tahun1 = '$tahun1', ".
 								"tahun2 = '$tahun2' ".
 								"WHERE kd_member = '$kd9_session' ".
 								"AND kd = '$kd'");
@@ -136,7 +136,7 @@ if ($_POST['btnHPS'])
 		$kd = nosql($_POST["$yuhu"]);
 
 		//del
-		mysql_query("DELETE FROM m_tapel ".
+		mysqli_query($koneksi, "DELETE FROM m_tapel ".
 						"WHERE kd_member = '$kd9_session' ".
 						"AND kd = '$kd'");
 		}
@@ -188,21 +188,21 @@ echo '<form action="'.$filenya.'" method="post" name="formx">
 
 
 //query
-$q1 = mysql_query("SELECT * FROM m_tapel ".
+$q1 = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 					"WHERE kd_member = '$kd9_session' ".
 					"ORDER BY tahun1 ASC");
-$row1 = mysql_fetch_assoc($q1);
-$total1 = mysql_num_rows($q1);
+$row1 = mysqli_fetch_assoc($q1);
+$total1 = mysqli_num_rows($q1);
 
 //jika null, kasi sample
 if (empty($total1))
 	{
 	//query
-	$q = mysql_query("SELECT * FROM m_tapel ".
+	$q = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd_member = '' ".
 						"ORDER BY tahun1 ASC");
-	$row = mysql_fetch_assoc($q);
-	$total = mysql_num_rows($q);
+	$row = mysqli_fetch_assoc($q);
+	$total = mysqli_num_rows($q);
 
 	do
 		{
@@ -214,19 +214,19 @@ if (empty($total1))
 
 
 		//query
-		mysql_query("INSERT INTO m_tapel(kd, kd_member, tahun1, tahun2, postdate) VALUES ".
+		mysqli_query($koneksi, "INSERT INTO m_tapel(kd, kd_member, tahun1, tahun2, postdate) VALUES ".
 						"('$kdx', '$kd9_session', '$tahun1', '$tahun2', '$today')");
 		}
-	while ($row1 = mysql_fetch_assoc($q1));
+	while ($row1 = mysqli_fetch_assoc($q1));
 	}
 
 
 //query
-$q = mysql_query("SELECT * FROM m_tapel ".
+$q = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 					"WHERE kd_member = '$kd9_session' ".
 					"ORDER BY tahun1 ASC");
-$row = mysql_fetch_assoc($q);
-$total = mysql_num_rows($q);
+$row = mysqli_fetch_assoc($q);
+$total = mysqli_num_rows($q);
 
 if ($total != 0)
 	{
@@ -267,7 +267,7 @@ if ($total != 0)
 		<td width="86%">'.$tahun1.'/'.$tahun2.'</td>
         </tr>';
 		}
-	while ($row = mysql_fetch_assoc($q));
+	while ($row = mysqli_fetch_assoc($q));
 
 	echo '</table>
 	<table width="275" border="0" cellspacing="0" cellpadding="3">

@@ -18,18 +18,18 @@ $smtkd = nosql($_REQUEST['smtkd']);
 
 
 //terpilih
-$qtpx = mysql_query("SELECT * FROM m_tapel ".
+$qtpx = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd = '$tapelkd'");
-$rowtpx = mysql_fetch_assoc($qtpx);
+$rowtpx = mysqli_fetch_assoc($qtpx);
 $tpx_thn1 = nosql($rowtpx['tahun1']);
 $tpx_thn2 = nosql($rowtpx['tahun2']);
 $tapelnya = "$tpx_thn1/$tpx_thn2";
 
 
 //terpilih
-$qbtx = mysql_query("SELECT * FROM m_kelas ".
+$qbtx = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 						"WHERE kd = '$kelkd'");
-$rowbtx = mysql_fetch_assoc($qbtx);
+$rowbtx = mysqli_fetch_assoc($qbtx);
 $btxkd = nosql($rowbtx['kd']);
 $btxkelas = balikin($rowbtx['kelas']);
 $btxruang = balikin($rowbtx['ruang']);
@@ -39,9 +39,9 @@ $kelasnya = "$btxkelas-$btxruang";
 
 
 //terpilih
-$qbtx = mysql_query("SELECT * FROM m_smt ".
+$qbtx = mysqli_query($koneksi, "SELECT * FROM m_smt ".
 						"WHERE kd = '$smtkd'");
-$rowbtx = mysql_fetch_assoc($qbtx);
+$rowbtx = mysqli_fetch_assoc($qbtx);
 $btxkd = nosql($rowbtx['kd']);
 $btxno = nosql($rowbtx['no']);
 $btxsmt = balikin($rowbtx['smt']);
@@ -184,15 +184,15 @@ $sheet->getStyle('C4')->applyFromArray( $style_header );
 
 //datanya /////////////////////////////////////////////////////////////////////////////////////////////////
 //data 
-$qpel = mysql_query("SELECT m_guru_mapel.*, m_mapel.kode AS kkode ".
+$qpel = mysqli_query($koneksi, "SELECT m_guru_mapel.*, m_mapel.kode AS kkode ".
 						"FROM m_guru_mapel, m_mapel ".
 						"WHERE m_guru_mapel.kd_mapel = m_mapel.kd ".
 						"AND m_guru_mapel.kd_tapel = '$tapelkd' ".
 						"AND m_guru_mapel.kd_kelas = '$kelkd' ".
 						"AND m_guru_mapel.kd_smt = '$smtkd' ".
 						"ORDER BY m_mapel.kode ASC");
-$rpel = mysql_fetch_assoc($qpel);
-$tpel = mysql_num_rows($qpel);
+$rpel = mysqli_fetch_assoc($qpel);
+$tpel = mysqli_num_rows($qpel);
 
 
 
@@ -206,9 +206,9 @@ do
 
 	
 	//gurunya
-	$qku2 = mysql_query("SELECT * FROM m_guru ".
+	$qku2 = mysqli_query($koneksi, "SELECT * FROM m_guru ".
 						"WHERE kd = '$i_gurkd'");
-	$rku2 = mysql_fetch_assoc($qku2);
+	$rku2 = mysqli_fetch_assoc($qku2);
 	$ku2_kode = nosql($rku2['kode']);
 	$ku2_nama = balikin($rku2['nama']);
 	
@@ -216,9 +216,9 @@ do
 	
 	
 	//mapelnya
-	$qku = mysql_query("SELECT * FROM m_mapel ".
+	$qku = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 						"WHERE kd = '$i_mapelkd'");
-	$rku = mysql_fetch_assoc($qku);
+	$rku = mysqli_fetch_assoc($qku);
 	$ku_mapel = balikin($rku['mapel']);
 	
 
@@ -234,7 +234,7 @@ do
 	$sheet->getStyle('C'.$i_nox.'')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
 	$sheet->getStyle('C'.$i_nox.'')->applyFromArray( $style_data );
 	}
-while ($rpel = mysql_fetch_assoc($qpel));
+while ($rpel = mysqli_fetch_assoc($qpel));
 
 
 

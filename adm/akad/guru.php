@@ -41,9 +41,9 @@ if ($s == "edit")
 	$kdx = nosql($_REQUEST['kd']);
 
 	//query
-	$qx = mysql_query("SELECT * FROM m_guru ".
+	$qx = mysqli_query($koneksi, "SELECT * FROM m_guru ".
 						"WHERE kd = '$kdx'");
-	$rowx = mysql_fetch_assoc($qx);
+	$rowx = mysqli_fetch_assoc($qx);
 	$e_kode = balikin($rowx['kode']);
 	$e_nip = balikin($rowx['nip']);
 	$e_nama = balikin($rowx['nama']);
@@ -82,10 +82,10 @@ if ($_POST['btnSMP'])
 		if (empty($s))
 			{
 			///cek
-			$qcc = mysql_query("SELECT * FROM m_guru ".
+			$qcc = mysqli_query($koneksi, "SELECT * FROM m_guru ".
 								"WHERE kode = '$e_kode'");
-			$rcc = mysql_fetch_assoc($qcc);
-			$tcc = mysql_num_rows($qcc);
+			$rcc = mysqli_fetch_assoc($qcc);
+			$tcc = mysqli_num_rows($qcc);
 
 
 			//nek ada
@@ -99,7 +99,7 @@ if ($_POST['btnSMP'])
 			else
 				{
 				//insert
-				mysql_query("INSERT INTO m_guru(kd, kode, nip, nama) VALUES ".
+				mysqli_query($koneksi, "INSERT INTO m_guru(kd, kode, nip, nama) VALUES ".
 								"('$x', '$e_kode', '$e_nip', '$e_nama')");
 
 				//re-direct
@@ -113,7 +113,7 @@ if ($_POST['btnSMP'])
 		else if ($s == "edit")
 			{
 			//update
-			mysql_query("UPDATE m_guru SET kode = '$e_kode', ".
+			mysqli_query($koneksi, "UPDATE m_guru SET kode = '$e_kode', ".
 							"nip = '$e_nip', ".
 							"nama = '$e_nama' ".
 							"WHERE kd = '$kd'");
@@ -144,7 +144,7 @@ if ($_POST['btnHPS'])
 		$kd = nosql($_POST["$yuhu"]);
 
 		//del
-		mysql_query("DELETE FROM m_guru ".
+		mysqli_query($koneksi, "DELETE FROM m_guru ".
 						"WHERE kd = '$kd'");
 		}
 
@@ -223,10 +223,10 @@ Nama :
 
 
 //query
-$q = mysql_query("SELECT * FROM m_guru ".
+$q = mysqli_query($koneksi, "SELECT * FROM m_guru ".
 					"ORDER BY round(kode) ASC");
-$row = mysql_fetch_assoc($q);
-$total = mysql_num_rows($q);
+$row = mysqli_fetch_assoc($q);
+$total = mysqli_num_rows($q);
 
 
 if ($total != 0)
@@ -263,7 +263,7 @@ if ($total != 0)
 		<td>'.$i_nama.'</td>
        	</tr>';
 		}
-	while ($row = mysql_fetch_assoc($q));
+	while ($row = mysqli_fetch_assoc($q));
 	}
 
 echo '</table>

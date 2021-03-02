@@ -63,10 +63,10 @@ if ($_POST['btnOK'])
 	else
 		{
 		//query
-		$q = mysql_query("SELECT * FROM member ".
+		$q = mysqli_query($koneksi, "SELECT * FROM member ".
 							"WHERE usernamex = '$e_username'");
-		$row = mysql_fetch_assoc($q);
-		$total = mysql_num_rows($q);
+		$row = mysqli_fetch_assoc($q);
+		$total = mysqli_num_rows($q);
 
 		//cek login
 		if (empty($total))
@@ -74,7 +74,7 @@ if ($_POST['btnOK'])
 			$kd = $x;
 			
 			//insert
-			mysql_query("INSERT INTO member(kd, nama, alamat, ".
+			mysqli_query($koneksi, "INSERT INTO member(kd, nama, alamat, ".
 							"sekolah, telp, email, web, ".
 							"usernamex, passwordx, postdate) VALUES ".
 							"('$kd', '$e_nama', '$e_alamat', ".

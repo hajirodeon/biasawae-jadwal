@@ -85,7 +85,7 @@ if ($_POST['btnSMP'])
 	else
 		{
 		//cek
-		$qc = mysql_query("SELECT m_guru_prog_pddkn.*, m_guru.*, m_pegawai.* ".
+		$qc = mysqli_query($koneksi, "SELECT m_guru_prog_pddkn.*, m_guru.*, m_pegawai.* ".
 							"FROM m_guru_prog_pddkn, m_guru, m_pegawai ".
 							"WHERE m_guru_prog_pddkn.kd_guru = m_guru.kd ".
 							"AND m_guru.kd_pegawai = m_pegawai.kd ".
@@ -93,8 +93,8 @@ if ($_POST['btnSMP'])
 							"AND m_guru.kd_kelas = '$kelkd' ".
 							"AND m_guru_prog_pddkn.kd_prog_pddkn = '$pelkd' ".
 							"AND m_guru_prog_pddkn.kd_guru = '$gurkd'");
-		$rc = mysql_fetch_assoc($qc);
-		$tc = mysql_num_rows($qc);
+		$rc = mysqli_fetch_assoc($qc);
+		$tc = mysqli_num_rows($qc);
 		$c_nip = nosql($rc['nip']);
 		$c_nama = balikin2($rc['nama']);
 
@@ -110,7 +110,7 @@ if ($_POST['btnSMP'])
 		else
 			{
 			//query
-			mysql_query("INSERT INTO m_guru_prog_pddkn(kd, kd_guru, kd_prog_pddkn) VALUES ".
+			mysqli_query($koneksi, "INSERT INTO m_guru_prog_pddkn(kd, kd_guru, kd_prog_pddkn) VALUES ".
 					"('$x', '$gurkd', '$pelkd')");
 
 			//re-direct
@@ -132,7 +132,7 @@ if ($s == "hapus")
 	$pkd = nosql($_REQUEST['pkd']);
 
 	//query
-	mysql_query("DELETE FROM m_guru_prog_pddkn ".
+	mysqli_query($koneksi, "DELETE FROM m_guru_prog_pddkn ".
 			"WHERE kd_guru = '$mgkd' ".
 			"AND kd_prog_pddkn = '$pkd'");
 
@@ -177,19 +177,19 @@ Tahun Pelajaran : ';
 echo "<select name=\"tapel\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qtpx = mysql_query("SELECT * FROM m_tapel ".
+$qtpx = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd = '$tapelkd'");
-$rowtpx = mysql_fetch_assoc($qtpx);
+$rowtpx = mysqli_fetch_assoc($qtpx);
 $tpx_kd = nosql($rowtpx['kd']);
 $tpx_thn1 = nosql($rowtpx['tahun1']);
 $tpx_thn2 = nosql($rowtpx['tahun2']);
 
 echo '<option value="'.$tpx_kd.'">'.$tpx_thn1.'/'.$tpx_thn2.'</option>';
 
-$qtp = mysql_query("SELECT * FROM m_tapel ".
+$qtp = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd <> '$tapelkd' ".
 						"ORDER BY tahun1 ASC");
-$rowtp = mysql_fetch_assoc($qtp);
+$rowtp = mysqli_fetch_assoc($qtp);
 
 do
 	{
@@ -199,7 +199,7 @@ do
 
 	echo '<option value="'.$filenya.'?tapelkd='.$tpkd.'">'.$tpth1.'/'.$tpth2.'</option>';
 	}
-while ($rowtp = mysql_fetch_assoc($qtp));
+while ($rowtp = mysqli_fetch_assoc($qtp));
 
 echo '</select>,
 
@@ -207,19 +207,19 @@ Jenis Mata Pelajaran : ';
 echo "<select name=\"jenis\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qjnx = mysql_query("SELECT * FROM m_prog_pddkn_jns ".
+$qjnx = mysqli_query($koneksi, "SELECT * FROM m_prog_pddkn_jns ".
 						"WHERE kd = '$jnskd'");
-$rowjnx = mysql_fetch_assoc($qjnx);
+$rowjnx = mysqli_fetch_assoc($qjnx);
 $jnx_kd = nosql($rowjnx['kd']);
 $jnx_jns = balikin($rowjnx['jenis']);
 
 echo '<option value="'.$jnx_kd.'">'.$jnx_jns.'</option>';
 
 //jenis
-$qjn = mysql_query("SELECT * FROM m_prog_pddkn_jns ".
+$qjn = mysqli_query($koneksi, "SELECT * FROM m_prog_pddkn_jns ".
 						"WHERE kd <> '$jnskd' ".
 						"ORDER BY jenis ASC");
-$rowjn = mysql_fetch_assoc($qjn);
+$rowjn = mysqli_fetch_assoc($qjn);
 
 do
 	{
@@ -228,23 +228,23 @@ do
 
 	echo '<option value="'.$filenya.'?tapelkd='.$tapelkd.'&jnskd='.$jn_kd.'">'.$jn_jns.'</option>';
 	}
-while ($rowjn = mysql_fetch_assoc($qjn));
+while ($rowjn = mysqli_fetch_assoc($qjn));
 
 echo '</select>,
 
 Mata Pelajaran : ';
 echo "<select name=\"progdi\" onChange=\"MM_jumpMenu('self',this,0)\">";
 //terpilih
-$qjnx = mysql_query("SELECT * FROM m_prog_pddkn ".
+$qjnx = mysqli_query($koneksi, "SELECT * FROM m_prog_pddkn ".
 			"WHERE kd = '$pelkd'");
-$rowjnx = mysql_fetch_assoc($qjnx);
+$rowjnx = mysqli_fetch_assoc($qjnx);
 $jnx_kd = nosql($rowjnx['kd']);
 $jnx_pel = balikin($rowjnx['prog_pddkn']);
 
 echo '<option value="'.$jnx_kd.'" selected>'.$jnx_pel.'</option>';
 
 //daftar mapel
-$qbs = mysql_query("SELECT DISTINCT(m_prog_pddkn.kd) AS mmkd ".
+$qbs = mysqli_query($koneksi, "SELECT DISTINCT(m_prog_pddkn.kd) AS mmkd ".
 			"FROM m_prog_pddkn_kelas, m_prog_pddkn ".
 			"WHERE m_prog_pddkn_kelas.kd_prog_pddkn = m_prog_pddkn.kd ".
 			"AND m_prog_pddkn_kelas.kd_keahlian = '$keakd' ".
@@ -253,21 +253,21 @@ $qbs = mysql_query("SELECT DISTINCT(m_prog_pddkn.kd) AS mmkd ".
 			"AND m_prog_pddkn.kd <> '$pelkd' ".
 			"ORDER BY round(m_prog_pddkn.no) ASC, ".
 			"round(m_prog_pddkn.no_sub) ASC");
-$rbs = mysql_fetch_assoc($qbs);
+$rbs = mysqli_fetch_assoc($qbs);
 
 do
 	{
 	$bskd = nosql($rbs['mmkd']);
 
 	//detail
-	$qprodi = mysql_query("SELECT * FROM m_prog_pddkn ".
+	$qprodi = mysqli_query($koneksi, "SELECT * FROM m_prog_pddkn ".
 				"WHERE kd = '$bskd'");
-	$rprodi = mysql_fetch_assoc($qprodi);
+	$rprodi = mysqli_fetch_assoc($qprodi);
 	$bspel = balikin2($rprodi['prog_pddkn']);
 
 	echo '<option value="'.$filenya.'?tapelkd='.$tapelkd.'&jnskd='.$jnskd.'&pelkd='.$bskd.'">'.$bspel.'</option>';
 	}
-while ($rbs = mysql_fetch_assoc($qbs));
+while ($rbs = mysqli_fetch_assoc($qbs));
 
 echo '</select>
 
@@ -307,26 +307,26 @@ else
 	<option value="" selected>-GURU-</option>';
 
 	//daftar guru
-	$qg = mysql_query("SELECT DISTINCT(m_pegawai.kd) AS mpkd ".
+	$qg = mysqli_query($koneksi, "SELECT DISTINCT(m_pegawai.kd) AS mpkd ".
 							"FROM m_guru, m_pegawai ".
 							"WHERE m_guru.kd_pegawai = m_pegawai.kd ".
 							"AND m_guru.kd_tapel = '$tapelkd' ".
 							"ORDER BY round(m_pegawai.nip) ASC");
-	$rg = mysql_fetch_assoc($qg);
+	$rg = mysqli_fetch_assoc($qg);
 
 	do
 		{
 		$x_mpkd = nosql($rg['mpkd']);
 
 		//detail
-		$qpgw = mysql_query("SELECT m_pegawai.*, m_guru.*, ".
+		$qpgw = mysqli_query($koneksi, "SELECT m_pegawai.*, m_guru.*, ".
 								"m_guru.kd AS mgkd ".
 								"FROM m_pegawai, m_guru ".
 								"WHERE m_guru.kd_pegawai = m_pegawai.kd ".
 								"AND m_guru.kd_tapel = '$tapelkd' ".
 								"AND m_pegawai.kd = '$x_mpkd'");
-		$rpgw = mysql_fetch_assoc($qpgw);
-		$tpwg = mysql_num_rows($qpgw);
+		$rpgw = mysqli_fetch_assoc($qpgw);
+		$tpwg = mysqli_num_rows($qpgw);
 		$i_mgkd = nosql($rpgw['mgkd']);
 		$i_nip = nosql($rpgw['nip']);
 		$i_gnam = balikin2($rpgw['nama']);
@@ -334,17 +334,17 @@ else
 
 		echo '<option value="'.$i_mgkd.'">'.$i_nip.'. '.$i_gnam.'</option>';
 		}
-	while ($rg = mysql_fetch_assoc($qg));
+	while ($rg = mysqli_fetch_assoc($qg));
 
 	echo '</select>,
 	<select name="kelas">
 	<option value="">-Kelas-</option>';
 
-	$qbt = mysql_query("SELECT * FROM m_kelas ".
+	$qbt = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 							"WHERE kelas LIKE '%$keax_singk%' ".
 							"ORDER BY kelas ASC, ".
 							"round(no) ASC");
-	$rowbt = mysql_fetch_assoc($qbt);
+	$rowbt = mysqli_fetch_assoc($qbt);
 
 	do
 		{
@@ -353,7 +353,7 @@ else
 
 		echo '<option value="'.$btkd.'">'.$btkelas.'</option>';
 		}
-	while ($rowbt = mysql_fetch_assoc($qbt));
+	while ($rowbt = mysqli_fetch_assoc($qbt));
 
 	echo '</select>
 	<input name="tapelkd" type="hidden" value="'.nosql($_REQUEST['tapelkd']).'">
@@ -364,14 +364,14 @@ else
 
 
 	//query
-	$q = mysql_query("SELECT DISTINCT(m_pegawai.kd) AS mpkd ".
+	$q = mysqli_query($koneksi, "SELECT DISTINCT(m_pegawai.kd) AS mpkd ".
 							"FROM m_pegawai, m_guru, m_guru_prog_pddkn ".
 							"WHERE m_guru.kd_pegawai = m_pegawai.kd ".
 							"AND m_guru_prog_pddkn.kd_guru = m_guru.kd ".
 							"AND m_guru.kd_tapel = '$tapelkd' ".
 							"AND m_guru_prog_pddkn.kd_prog_pddkn = '$pelkd'");
-	$row = mysql_fetch_assoc($q);
-	$total = mysql_num_rows($q);
+	$row = mysqli_fetch_assoc($q);
+	$total = mysqli_num_rows($q);
 
 	if ($total != 0)
 		{
@@ -400,7 +400,7 @@ else
 
 
 			//detail
-			$qpgw = mysql_query("SELECT m_pegawai.*, m_guru.*, m_guru_prog_pddkn.*, ".
+			$qpgw = mysqli_query($koneksi, "SELECT m_pegawai.*, m_guru.*, m_guru_prog_pddkn.*, ".
 									"m_guru_prog_pddkn.kd_guru AS mgkd, ".
 									"m_guru_prog_pddkn.kd_prog_pddkn AS pkd ".
 									"FROM m_pegawai, m_guru, m_guru_prog_pddkn ".
@@ -409,8 +409,8 @@ else
 									"AND m_guru.kd_tapel = '$tapelkd' ".
 									"AND m_guru_prog_pddkn.kd_prog_pddkn = '$pelkd' ".
 									"AND m_pegawai.kd = '$i_mpkd'");
-			$rpgw = mysql_fetch_assoc($qpgw);
-			$tpwg = mysql_num_rows($qpgw);
+			$rpgw = mysqli_fetch_assoc($qpgw);
+			$tpwg = mysqli_num_rows($qpgw);
 			$i_mgkd = nosql($rpgw['mgkd']);
 			$i_pkd = nosql($rpgw['pkd']);
 			$i_gnam = balikin2($rpgw['nama']);
@@ -439,7 +439,7 @@ else
 			echo '</td>
 			<td>';
 			//ruang kelas
-			$qru1 = mysql_query("SELECT m_pegawai.*, m_guru.*, m_guru.kd AS mgkd, ".
+			$qru1 = mysqli_query($koneksi, "SELECT m_pegawai.*, m_guru.*, m_guru.kd AS mgkd, ".
 									"m_guru_prog_pddkn.* ".
 									"FROM m_pegawai, m_guru, m_guru_prog_pddkn ".
 									"WHERE m_guru.kd_pegawai = m_pegawai.kd ".
@@ -447,8 +447,8 @@ else
 									"AND m_guru.kd_tapel = '$tapelkd' ".
 									"AND m_pegawai.kd = '$i_mpkd' ".
 									"AND m_guru_prog_pddkn.kd_prog_pddkn = '$pelkd'");
-			$rru1 = mysql_fetch_assoc($qru1);
-			$tru1 = mysql_num_rows($qru1);
+			$rru1 = mysqli_fetch_assoc($qru1);
+			$tru1 = mysqli_num_rows($qru1);
 
 
 			do
@@ -456,21 +456,21 @@ else
 				$ru1_kelkd = nosql($rru1['kd_kelas']);
 
 				//detail kelas
-				$qkelx = mysql_query("SELECT * FROM m_kelas ".
+				$qkelx = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 							"WHERE kd = '$ru1_kelkd'");
-				$rkelx = mysql_fetch_assoc($qkelx);
-				$tkelx = mysql_num_rows($qkelx);
+				$rkelx = mysqli_fetch_assoc($qkelx);
+				$tkelx = mysqli_num_rows($qkelx);
 				$kelx_kelas = nosql($rkelx['kelas']);
 
 
 				echo ''.$kelx_kelas.', ';
 				}
-			while ($rru1 = mysql_fetch_assoc($qru1));
+			while ($rru1 = mysqli_fetch_assoc($qru1));
 
 			echo '</td>
 			</tr>';
 			}
-		while ($row = mysql_fetch_assoc($q));
+		while ($row = mysqli_fetch_assoc($q));
 
 		echo '</table>
 		<table width="600" border="0" cellspacing="0" cellpadding="3">

@@ -118,10 +118,10 @@ if ($_POST['btnSMP'])
 					}
 
 				//query
-				$qkuji = mysql_query("SELECT * FROM m_jam ".
+				$qkuji = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 							"WHERE kd = '$jam'");
-				$rkuji = mysql_fetch_assoc($qkuji);
-				$tkuji = mysql_num_rows($qkuji);
+				$rkuji = mysqli_fetch_assoc($qkuji);
+				$tkuji = mysqli_num_rows($qkuji);
 				$kuji_jam = nosql($rkuji['jam']);
 
 				//jenjang max penambahan
@@ -129,22 +129,22 @@ if ($_POST['btnSMP'])
 
 
 				//terpilih
-				$qkujix = mysql_query("SELECT * FROM m_jam ".
+				$qkujix = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 							"WHERE jam = '$kuji_max'");
-				$rkujix = mysql_fetch_assoc($qkujix);
-				$tkujix = mysql_num_rows($qkujix);
+				$rkujix = mysqli_fetch_assoc($qkujix);
+				$tkujix = mysqli_num_rows($qkujix);
 				$kujix_kd = nosql($rkujix['kd']);
 
 
 				//netralkan dahulu
-				mysql_query("DELETE FROM jadwal ".
+				mysqli_query($koneksi, "DELETE FROM jadwal ".
 								"WHERE kd_tapel = '$tapelkd' ".
 								"AND kd_smt = '$smtkd' ".
 								"AND kd_kelas = '$kelkd' ".
 								"AND kd = '$kd'");
 
 				//query
-				mysql_query("INSERT INTO jadwal(kd, kd_tapel, kd_smt, kd_kelas, ".
+				mysqli_query($koneksi, "INSERT INTO jadwal(kd, kd_tapel, kd_smt, kd_kelas, ".
 								"kd_jam, kd_hari, kd_guru_mapel) VALUES ".
 								"('$x', '$tapelkd', '$smtkd', '$kelkd', ".
 								"'$kujix_kd', '$hari', '$pel')");
@@ -164,18 +164,18 @@ if ($_POST['btnSMP'])
 		else if (empty($s)) //nek baru
 			{
 			//cek terisi...
-			$qcc = mysql_query("SELECT * FROM jadwal ".
+			$qcc = mysqli_query($koneksi, "SELECT * FROM jadwal ".
 									"WHERE kd_tapel = '$tapelkd' ".
 									"AND kd_smt = '$smtkd' ".
 									"AND kd_kelas = '$kelkd' ".
 									"AND kd_jam = '$jam' ".
 									"AND kd_hari = '$hari'");
-			$rcc = mysql_fetch_assoc($qcc);
-			$tcc = mysql_num_rows($qcc);
+			$rcc = mysqli_fetch_assoc($qcc);
+			$tcc = mysqli_num_rows($qcc);
 
 
 			//cek telah mengajar pada kelas berbeda, pada hari, jam, dan guru sama [gak boleh tubrukan...].
-			$qcc1 = mysql_query("SELECT jadwal.*, m_guru_mapel.* ".
+			$qcc1 = mysqli_query($koneksi, "SELECT jadwal.*, m_guru_mapel.* ".
 									"FROM jadwal, m_guru_mapel ".
 									"WHERE jadwal.kd_guru_mapel = m_guru_mapel.kd ".
 									"AND jadwal.kd_tapel = '$tapelkd' ".
@@ -183,8 +183,8 @@ if ($_POST['btnSMP'])
 									"AND jadwal.kd_kelas = '$kelkd' ".
 									"AND jadwal.kd_jam = '$jam' ".
 									"AND jadwal.kd_hari = '$hari'");
-			$rcc1 = mysql_fetch_assoc($qcc1);
-			$tcc1 = mysql_num_rows($qcc1);
+			$rcc1 = mysqli_fetch_assoc($qcc1);
+			$tcc1 = mysqli_num_rows($qcc1);
 
 
 
@@ -192,10 +192,10 @@ if ($_POST['btnSMP'])
 			for($j=1;$j<=$lama;$j++)
 				{
 				//query
-				$qkuji = mysql_query("SELECT * FROM m_jam ".
+				$qkuji = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 							"WHERE kd = '$jam'");
-				$rkuji = mysql_fetch_assoc($qkuji);
-				$tkuji = mysql_num_rows($qkuji);
+				$rkuji = mysqli_fetch_assoc($qkuji);
+				$tkuji = mysqli_num_rows($qkuji);
 				$kuji_jam = nosql($rkuji['jam']);
 
 
@@ -204,15 +204,15 @@ if ($_POST['btnSMP'])
 
 
 				//terpilih
-				$qkujix = mysql_query("SELECT * FROM m_jam ".
+				$qkujix = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 							"WHERE jam = '$kuji_max'");
-				$rkujix = mysql_fetch_assoc($qkujix);
-				$tkujix = mysql_num_rows($qkujix);
+				$rkujix = mysqli_fetch_assoc($qkujix);
+				$tkujix = mysqli_num_rows($qkujix);
 				$kujix_kd = nosql($rkujix['kd']);
 
 
 				//query
-				mysql_query("INSERT INTO jadwal(kd, kd_tapel, kd_smt, kd_kelas, ".
+				mysqli_query($koneksi, "INSERT INTO jadwal(kd, kd_tapel, kd_smt, kd_kelas, ".
 								"kd_jam, kd_hari, kd_guru_mapel) VALUES ".
 								"('$x', '$tapelkd', '$smtkd', '$kelkd', ".
 								"'$kujix_kd', '$hari', '$pel')");
@@ -239,12 +239,12 @@ if ($_POST['btnSMP'])
 if ($s == "edit")
 	{
 	//query
-	$qdir = mysql_query("SELECT * FROM jadwal ".
+	$qdir = mysqli_query($koneksi, "SELECT * FROM jadwal ".
 							"WHERE kd_tapel = '$tapelkd' ".
 							"AND kd_smt = '$smtkd' ".
 							"AND kd_kelas = '$kelkd' ".
 							"AND kd = '$kd'");
-	$rdir = mysql_fetch_assoc($qdir);
+	$rdir = mysqli_fetch_assoc($qdir);
 	$dir_harikd = nosql($rdir['kd_hari']);
 	$dir_jamkd = nosql($rdir['kd_jam']);
 	$dir_gmkd = nosql($rdir['kd_guru_mapel']);
@@ -282,9 +282,9 @@ echo '<form action="'.$filenya.'" method="post" name="formx">
 <td>
 Tahun Pelajaran : ';
 //terpilih
-$qtpx = mysql_query("SELECT * FROM m_tapel ".
+$qtpx = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd = '$tapelkd'");
-$rowtpx = mysql_fetch_assoc($qtpx);
+$rowtpx = mysqli_fetch_assoc($qtpx);
 $tpx_kd = nosql($rowtpx['kd']);
 $tpx_thn1 = nosql($rowtpx['tahun1']);
 $tpx_thn2 = nosql($rowtpx['tahun2']);
@@ -293,9 +293,9 @@ echo '<strong>'.$tpx_thn1.'/'.$tpx_thn2.'</strong>,
 
 Semester : ';
 //terpilih
-$qsmtx = mysql_query("SELECT * FROM m_smt ".
+$qsmtx = mysqli_query($koneksi, "SELECT * FROM m_smt ".
 						"WHERE kd = '$smtkd'");
-$rowsmtx = mysql_fetch_assoc($qsmtx);
+$rowsmtx = mysqli_fetch_assoc($qsmtx);
 $smtx_kd = nosql($rowsmtx['kd']);
 $smtx_smt = nosql($rowsmtx['smt']);
 
@@ -313,20 +313,20 @@ Kelas : ';
 echo "<select name=\"kelas\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qbtx = mysql_query("SELECT * FROM m_kelas ".
+$qbtx = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 			"WHERE kd = '$kelkd'");
-$rowbtx = mysql_fetch_assoc($qbtx);
+$rowbtx = mysqli_fetch_assoc($qbtx);
 $btxkd = nosql($rowbtx['kd']);
 $btxkelas = balikin($rowbtx['kelas']);
 $btxruang = balikin($rowbtx['ruang']);
 
 echo '<option value="'.$btxkd.'">'.$btxkelas.'-'.$btxruang.'</option>';
 
-$qbt = mysql_query("SELECT * FROM m_kelas ".
+$qbt = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 						"ORDER BY no ASC, ".
 						"kelas ASC, ".
 						"ruang ASC");
-$rowbt = mysql_fetch_assoc($qbt);
+$rowbt = mysqli_fetch_assoc($qbt);
 
 do
 	{
@@ -336,7 +336,7 @@ do
 
 	echo '<option value="'.$filenya.'?tapelkd='.$tapelkd.'&smtkd='.$smtkd.'&kelkd='.$btkd.'">'.$btkelas.'-'.$btruang.'</option>';
 	}
-while ($rowbt = mysql_fetch_assoc($qbt));
+while ($rowbt = mysqli_fetch_assoc($qbt));
 
 echo '</select>
 </td>
@@ -352,19 +352,19 @@ echo '</select>
 
 
 //hari-terpilih
-$qhrix = mysql_query("SELECT * FROM m_hari ".
+$qhrix = mysqli_query($koneksi, "SELECT * FROM m_hari ".
 			"WHERE kd = '$dir_harikd'");
-$rhrix = mysql_fetch_assoc($qhrix);
+$rhrix = mysqli_fetch_assoc($qhrix);
 $hrix_kd = nosql($rhrix['kd']);
 $hrix_hr = balikin($rhrix['hari']);
 
 echo '<select name="hari">
 <option value="'.$hrix_kd.'" selected>'.$hrix_hr.'</option>';
 //hari
-$qhri = mysql_query("SELECT * FROM m_hari ".
+$qhri = mysqli_query($koneksi, "SELECT * FROM m_hari ".
 						"WHERE kd <> '$hrix_kd' ".
 						"ORDER BY round(no) ASC");
-$rhri = mysql_fetch_assoc($qhri);
+$rhri = mysqli_fetch_assoc($qhri);
 
 do
 	{
@@ -373,7 +373,7 @@ do
 
 	echo '<option value="'.$hri_kd.'">'.$hri_hr.'</option>';
 	}
-while ($rhri = mysql_fetch_assoc($qhri));
+while ($rhri = mysqli_fetch_assoc($qhri));
 
 echo '</select>
 <br><br>
@@ -382,19 +382,19 @@ echo '</select>
 
 
 //jam-terpilih
-$qjmx = mysql_query("SELECT * FROM m_jam ".
+$qjmx = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 			"WHERE kd = '$dir_jamkd'");
-$rjmx = mysql_fetch_assoc($qjmx);
+$rjmx = mysqli_fetch_assoc($qjmx);
 $jmx_kd = nosql($rjmx['kd']);
 $jmx_jam = nosql($rjmx['jam']);
 
 echo '<select name="jam">
 <option value="'.$jmx_kd.'" selected>'.$jmx_jam.'</option>';
 //jam
-$qjm = mysql_query("SELECT * FROM m_jam ".
+$qjm = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 			"WHERE kd <> '$jmx_kd' ".
 			"ORDER BY round(jam) ASC");
-$rjm = mysql_fetch_assoc($qjm);
+$rjm = mysqli_fetch_assoc($qjm);
 
 do
 	{
@@ -403,7 +403,7 @@ do
 
 	echo '<option value="'.$jm_kd.'">'.$jm_hr.'</option>';
 	}
-while ($rjm = mysql_fetch_assoc($qjm));
+while ($rjm = mysqli_fetch_assoc($qjm));
 
 echo '</select>
 <br><br>
@@ -416,14 +416,14 @@ echo '</select>
 <strong>Mata Pelajaran :</strong><br>';
 
 //program pendidikan-terpilih
-$qpelx = mysql_query("SELECT jadwal.*, m_guru.*, m_guru_mapel.*, m_guru_mapel.kd AS mmkd ".
+$qpelx = mysqli_query($koneksi, "SELECT jadwal.*, m_guru.*, m_guru_mapel.*, m_guru_mapel.kd AS mmkd ".
 						"FROM jadwal, m_guru, m_guru_mapel ".
 						"WHERE jadwal.kd_guru_mapel = m_guru_mapel.kd ".
 						"AND m_guru_mapel.kd_guru = m_guru.kd ".
 						"AND m_guru_mapel.kd_tapel = '$tapelkd' ".
 						"AND m_guru_mapel.kd_kelas = '$kelkd' ".
 						"AND jadwal.kd = '$kd'");
-$rpelx = mysql_fetch_assoc($qpelx);
+$rpelx = mysqli_fetch_assoc($qpelx);
 $pelx_kd = nosql($rpelx['mmkd']);
 $pelx_progkd = nosql($rpelx['kd_mapel']);
 $pelx_nip = nosql($rpelx['nip']);
@@ -431,9 +431,9 @@ $pelx_nm = balikin($rpelx['nama']);
 
 
 //mapel
-$q1 = mysql_query("SELECT * FROM m_mapel ".
+$q1 = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 					"WHERE kd = '$pelx_progkd'");
-$r1 = mysql_fetch_assoc($q1);
+$r1 = mysqli_fetch_assoc($q1);
 $pelx_pel = balikin($r1['mapel']);
 
 
@@ -441,14 +441,14 @@ echo '<select name="pel">
 <option value="'.$pelx_kd.'" selected>'.$pelx_pel.' ['.$pelx_nip.'. '.$pelx_nm.']</option>';
 
 //mata pelajaran
-$qpel = mysql_query("SELECT m_guru.*, m_guru_mapel.*, ".
+$qpel = mysqli_query($koneksi, "SELECT m_guru.*, m_guru_mapel.*, ".
 						"m_guru_mapel.kd AS mmkd ".
 						"FROM m_guru, m_guru_mapel ".
 						"WHERE m_guru_mapel.kd_guru = m_guru.kd ".
 						"AND m_guru_mapel.kd_tapel = '$tapelkd' ".
 						"AND m_guru_mapel.kd_kelas = '$kelkd' ".
 						"AND m_guru_mapel.kd_smt = '$smtkd'");
-$rpel = mysql_fetch_assoc($qpel);
+$rpel = mysqli_fetch_assoc($qpel);
 
 do
 	{
@@ -458,14 +458,14 @@ do
 	$pel_nm = balikin($rpel['nama']);
 
 	//mapel
-	$q1 = mysql_query("SELECT * FROM m_mapel ".
+	$q1 = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 				"WHERE kd = '$pel_progkd'");
-	$r1 = mysql_fetch_assoc($q1);
+	$r1 = mysqli_fetch_assoc($q1);
 	$pel_pel = balikin($r1['mapel']);
 
 	echo '<option value="'.$pel_kd.'">'.$pel_pel.' ['.$pel_nip.']. '.$pel_nm.'</option>';
 	}
-while ($rpel = mysql_fetch_assoc($qpel));
+while ($rpel = mysqli_fetch_assoc($qpel));
 
 echo '</select>
 <br><br>

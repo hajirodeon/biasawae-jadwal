@@ -43,10 +43,10 @@ if ($s == "edit")
 	$kdx = nosql($_REQUEST['kd']);
 
 	//query
-	$qx = mysql_query("SELECT * FROM m_kelas ".
+	$qx = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 						"WHERE kd_member = '$kd9_session' ".
 						"AND kd = '$kdx'");
-	$rowx = mysql_fetch_assoc($qx);
+	$rowx = mysqli_fetch_assoc($qx);
 	$e_no = nosql($rowx['no']);
 	$e_kelas = balikin($rowx['kelas']);
 	$e_ruang = balikin($rowx['ruang']);
@@ -74,12 +74,12 @@ if ($_POST['btnSMP'])
 	else
 		{
 		//cek
-		$qcc = mysql_query("SELECT * FROM m_kelas ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 								"WHERE kd_member = '$kd9_session' ".
 								"AND kelas = '$e_kelas' ".
 								"AND ruang = '$e_ruang'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 
 		//nek ada
 		if ($tcc != 0)
@@ -95,7 +95,7 @@ if ($_POST['btnSMP'])
 			if (empty($s))
 				{
 				//query
-				mysql_query("INSERT INTO m_kelas(kd, kd_member, no, kelas, ruang) VALUES ".
+				mysqli_query($koneksi, "INSERT INTO m_kelas(kd, kd_member, no, kelas, ruang) VALUES ".
 								"('$x', '$kd9_session', '$e_no', '$e_kelas', '$e_ruang')");
 
 				//re-direct
@@ -107,7 +107,7 @@ if ($_POST['btnSMP'])
 			else if ($s == "edit")
 				{
 				//query
-				mysql_query("UPDATE m_kelas SET no = '$e_no', ".
+				mysqli_query($koneksi, "UPDATE m_kelas SET no = '$e_no', ".
 								"kelas = '$e_kelas', ".
 								"ruang = '$e_ruang' ".
 								"WHERE kd_member = '$kd9_session' ".
@@ -137,7 +137,7 @@ if ($_POST['btnHPS'])
 		$kd = nosql($_POST["$yuhu"]);
 
 		//del
-		mysql_query("DELETE FROM m_kelas ".
+		mysqli_query($koneksi, "DELETE FROM m_kelas ".
 						"WHERE kd_member = '$kd9_session' ".
 						"AND kd = '$kd'");
 		}
@@ -202,22 +202,22 @@ Ruang :
 
 
 //query
-$q1 = mysql_query("SELECT * FROM m_kelas ".
+$q1 = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 					"WHERE kd_member = '$kd9_session'");
-$row1 = mysql_fetch_assoc($q1);
-$total1 = mysql_num_rows($q1);
+$row1 = mysqli_fetch_assoc($q1);
+$total1 = mysqli_num_rows($q1);
 
 //jika null, kasi sample
 if (empty($total1))
 	{
 	//query
-	$q = mysql_query("SELECT * FROM m_kelas ".
+	$q = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 						"WHERE kd_member = '' ".
 						"ORDER BY round(no) ASC, ".
 						"kelas ASC, ".
 						"ruang ASC");
-	$row = mysql_fetch_assoc($q);
-	$total = mysql_num_rows($q);
+	$row = mysqli_fetch_assoc($q);
+	$total = mysqli_num_rows($q);
 
 	do
 		{
@@ -229,10 +229,10 @@ if (empty($total1))
 		$i_ruang = balikin2($row['ruang']);
 		
 		//query
-		mysql_query("INSERT INTO m_kelas(kd, kd_member, no, kelas, ruang) VALUES ".
+		mysqli_query($koneksi, "INSERT INTO m_kelas(kd, kd_member, no, kelas, ruang) VALUES ".
 						"('$kdx', '$kd9_session', '$i_no', '$i_kelas', '$i_ruang')");
 		}
-	while ($row = mysql_fetch_assoc($q));
+	while ($row = mysqli_fetch_assoc($q));
 	
 	}
 
@@ -241,13 +241,13 @@ if (empty($total1))
 
 
 //query
-$q = mysql_query("SELECT * FROM m_kelas ".
+$q = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 					"WHERE kd_member = '$kd9_session' ".
 					"ORDER BY round(no) ASC, ".
 					"kelas ASC, ".
 					"ruang ASC");
-$row = mysql_fetch_assoc($q);
-$total = mysql_num_rows($q);
+$row = mysqli_fetch_assoc($q);
+$total = mysqli_num_rows($q);
 
 if ($total != 0)
 	{
@@ -293,7 +293,7 @@ if ($total != 0)
 		<td>'.$i_ruang.'</td>
     	</tr>';
 		}
-	while ($row = mysql_fetch_assoc($q));
+	while ($row = mysqli_fetch_assoc($q));
 
 	echo '</table>
 	<table width="400" border="0" cellspacing="0" cellpadding="3">

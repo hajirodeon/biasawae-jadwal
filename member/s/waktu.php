@@ -38,10 +38,10 @@ if ($s == "edit")
 	$kdx = nosql($_REQUEST['kd']);
 
 	//query
-	$qx = mysql_query("SELECT * FROM m_waktu ".
+	$qx = mysqli_query($koneksi, "SELECT * FROM m_waktu ".
 						"WHERE kd_member = '$kd9_session' ".
 						"AND kd = '$kdx'");
-	$rowx = mysql_fetch_assoc($qx);
+	$rowx = mysqli_fetch_assoc($qx);
 	$e_hrkd = balikin($rowx['kd_hari']);
 	$e_jkd = balikin($rowx['kd_jam']);
 	$e_no = balikin($rowx['no_urut']);
@@ -76,7 +76,7 @@ if ($_POST['btnSMP'])
 		if (empty($s))
 			{
 			//query
-			mysql_query("INSERT INTO m_waktu(kd, kd_member, kd_hari, kd_jam, no_urut, waktu, ket) VALUES ".
+			mysqli_query($koneksi, "INSERT INTO m_waktu(kd, kd_member, kd_hari, kd_jam, no_urut, waktu, ket) VALUES ".
 							"('$x', '$kd9_session', '$hrkd', '$jkd', '$e_no', '$e_waktu', '$e_ket')");
 
 			//re-direct
@@ -88,7 +88,7 @@ if ($_POST['btnSMP'])
 		else if ($s == "edit")
 			{
 			//query
-			mysql_query("UPDATE m_waktu SET kd_hari = '$hrkd', ".
+			mysqli_query($koneksi, "UPDATE m_waktu SET kd_hari = '$hrkd', ".
 							"kd_jam = '$jkd', ".
 							"no_urut = '$e_no', ".
 							"waktu = '$e_waktu', ".
@@ -119,7 +119,7 @@ if ($_POST['btnHPS'])
 		$kd = nosql($_POST["$yuhu"]);
 
 		//del
-		mysql_query("DELETE FROM m_waktu ".
+		mysqli_query($koneksi, "DELETE FROM m_waktu ".
 						"WHERE kd_member = '$kd9_session' ".
 						"AND kd = '$kd'");
 		}
@@ -163,19 +163,19 @@ Hari :
 <br>';
 
 //hari-terpilih
-$qhrix = mysql_query("SELECT * FROM m_hari ".
+$qhrix = mysqli_query($koneksi, "SELECT * FROM m_hari ".
 						"WHERE kd = '$e_hrkd'");
-$rhrix = mysql_fetch_assoc($qhrix);
+$rhrix = mysqli_fetch_assoc($qhrix);
 $hrix_kd = nosql($rhrix['kd']);
 $hrix_hr = balikin($rhrix['hari']);
 
 echo '<select name="e_hari">
 <option value="'.$hrix_kd.'" selected>'.$hrix_hr.'</option>';
 //hari
-$qhri = mysql_query("SELECT * FROM m_hari ".
+$qhri = mysqli_query($koneksi, "SELECT * FROM m_hari ".
 						"WHERE kd <> '$hrix_kd' ".
 						"ORDER BY round(no) ASC");
-$rhri = mysql_fetch_assoc($qhri);
+$rhri = mysqli_fetch_assoc($qhri);
 
 do
 	{
@@ -184,7 +184,7 @@ do
 
 	echo '<option value="'.$hri_kd.'">'.$hri_hr.'</option>';
 	}
-while ($rhri = mysql_fetch_assoc($qhri));
+while ($rhri = mysqli_fetch_assoc($qhri));
 
 echo '</select>
 
@@ -211,9 +211,9 @@ Jam ke- :
 <br>';
 
 //jam-terpilih
-$qjmx = mysql_query("SELECT * FROM m_jam ".
+$qjmx = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 						"WHERE kd = '$e_jkd'");
-$rjmx = mysql_fetch_assoc($qjmx);
+$rjmx = mysqli_fetch_assoc($qjmx);
 $jmx_kd = nosql($rjmx['kd']);
 $jmx_jam = nosql($rjmx['jam']);
 
@@ -222,10 +222,10 @@ echo '<select name="e_jam">
 <option value=""></option>';
 
 //jam
-$qjm = mysql_query("SELECT * FROM m_jam ".
+$qjm = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 						"WHERE kd <> '$jmx_kd' ".
 						"ORDER BY round(jam) ASC");
-$rjm = mysql_fetch_assoc($qjm);
+$rjm = mysqli_fetch_assoc($qjm);
 
 do
 	{
@@ -234,7 +234,7 @@ do
 
 	echo '<option value="'.$jm_kd.'">'.$jm_hr.'</option>';
 	}
-while ($rjm = mysql_fetch_assoc($qjm));
+while ($rjm = mysqli_fetch_assoc($qjm));
 
 echo '</select>
 
@@ -260,28 +260,28 @@ Ket. :
 </p>';
 
 //query
-$q = mysql_query("SELECT m_waktu.* ".
+$q = mysqli_query($koneksi, "SELECT m_waktu.* ".
 					"FROM m_waktu, m_hari ".
 					"WHERE m_waktu.kd_hari = m_hari.kd ".
 					"AND m_waktu.kd_member = '$kd9_session' ".
 					"ORDER BY m_hari.no ASC, ".
 					"round(m_waktu.no_urut) ASC");
-$row = mysql_fetch_assoc($q);
-$total = mysql_num_rows($q);
+$row = mysqli_fetch_assoc($q);
+$total = mysqli_num_rows($q);
 
 
 //jika null, kasi sampel
 if (empty($total))
 	{
 	//query
-	$q1 = mysql_query("SELECT m_waktu.* ".
+	$q1 = mysqli_query($koneksi, "SELECT m_waktu.* ".
 						"FROM m_waktu, m_hari ".
 						"WHERE m_waktu.kd_hari = m_hari.kd ".
 						"AND m_waktu.kd_member = '' ".
 						"ORDER BY m_hari.no ASC, ".
 						"round(m_waktu.no_urut) ASC");
-	$row1 = mysql_fetch_assoc($q1);
-	$total1 = mysql_num_rows($q1);
+	$row1 = mysqli_fetch_assoc($q1);
+	$total1 = mysqli_num_rows($q1);
 		
 	
 	do
@@ -309,11 +309,11 @@ if (empty($total))
 		
 
 		//query
-		mysql_query("INSERT INTO m_waktu(kd, kd_member, kd_hari, kd_jam, no_urut, waktu, ket, postdate) VALUES ".
+		mysqli_query($koneksi, "INSERT INTO m_waktu(kd, kd_member, kd_hari, kd_jam, no_urut, waktu, ket, postdate) VALUES ".
 						"('$kdx', '$kd9_session', '$i_hrkd', '$i_jkd', '$i_nourut', '$i_waktu', '$i_ket', '$today')");
 
 		}
-	while ($row1 = mysql_fetch_assoc($q1));
+	while ($row1 = mysqli_fetch_assoc($q1));
 		
 				
 	}		
@@ -324,14 +324,14 @@ if (empty($total))
 		
 
 //query
-$q = mysql_query("SELECT m_waktu.* ".
+$q = mysqli_query($koneksi, "SELECT m_waktu.* ".
 					"FROM m_waktu, m_hari ".
 					"WHERE m_waktu.kd_hari = m_hari.kd ".
 					"AND m_waktu.kd_member = '$kd9_session' ".
 					"ORDER BY m_hari.no ASC, ".
 					"round(m_waktu.no_urut) ASC");
-$row = mysql_fetch_assoc($q);
-$total = mysql_num_rows($q);
+$row = mysqli_fetch_assoc($q);
+$total = mysqli_num_rows($q);
 		
 
 
@@ -372,16 +372,16 @@ if ($total != 0)
 		$i_ket = balikin($row['ket']);
 
 		//hari
-		$qjmx = mysql_query("SELECT * FROM m_hari ".
+		$qjmx = mysqli_query($koneksi, "SELECT * FROM m_hari ".
 								"WHERE kd = '$i_hrkd'");
-		$rjmx = mysql_fetch_assoc($qjmx);
+		$rjmx = mysqli_fetch_assoc($qjmx);
 		$i_hari = balikin($rjmx['hari']);
 		
 		
 		//jam
-		$qjmx = mysql_query("SELECT * FROM m_jam ".
+		$qjmx = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 								"WHERE kd = '$i_jkd'");
-		$rjmx = mysql_fetch_assoc($qjmx);
+		$rjmx = mysqli_fetch_assoc($qjmx);
 		$i_jam = balikin($rjmx['jam']);
 		
 		
@@ -401,7 +401,7 @@ if ($total != 0)
 		<td>'.$i_ket.'</td>
         </tr>';
 		}
-	while ($row = mysql_fetch_assoc($q));
+	while ($row = mysqli_fetch_assoc($q));
 
 	echo '</table>
 	<table border="0" cellspacing="0" cellpadding="3">

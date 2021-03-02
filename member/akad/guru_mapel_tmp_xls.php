@@ -17,9 +17,9 @@ $tapelkd = nosql($_REQUEST['tapelkd']);
 
 
 //terpilih
-$qtpx = mysql_query("SELECT * FROM m_tapel ".
+$qtpx = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd = '$tapelkd'");
-$rowtpx = mysql_fetch_assoc($qtpx);
+$rowtpx = mysqli_fetch_assoc($qtpx);
 $tpx_thn1 = nosql($rowtpx['tahun1']);
 $tpx_thn2 = nosql($rowtpx['tahun2']);
 $tapelnya = "$tpx_thn1/$tpx_thn2";
@@ -169,7 +169,7 @@ $sheet->getStyle('F4')->applyFromArray( $style_header );
 
 //datanya /////////////////////////////////////////////////////////////////////////////////////////////////
 //pel-nya
-$quru = mysql_query("SELECT m_guru.kode AS gkode, ".
+$quru = mysqli_query($koneksi, "SELECT m_guru.kode AS gkode, ".
 						"m_guru.nama AS gnama, ".
 						"m_guru_mapel.* ".
 						"FROM m_guru, m_guru_mapel ".
@@ -177,7 +177,7 @@ $quru = mysql_query("SELECT m_guru.kode AS gkode, ".
 						"AND m_guru_mapel.kd_tapel = '$tapelkd' ".
 						"AND m_guru_mapel.kd_member = '$swkd' ".
 						"ORDER BY m_guru.kode ASC");
-$ruru = mysql_fetch_assoc($quru);
+$ruru = mysqli_fetch_assoc($quru);
 
 
 do
@@ -194,24 +194,24 @@ do
 	$gkd_mapel = nosql($ruru['kd_mapel']);
 
 	//smt
-	$qku = mysql_query("SELECT * FROM m_smt ".
+	$qku = mysqli_query($koneksi, "SELECT * FROM m_smt ".
 						"WHERE kd = '$gkd_smt'");
-	$rku = mysql_fetch_assoc($qku);
+	$rku = mysqli_fetch_assoc($qku);
 	$gsmt = balikin($rku['smt']);
 
 	//mapel
-	$q1 = mysql_query("SELECT * FROM m_mapel ".
+	$q1 = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 						"WHERE kd_member = '$swkd' ".
 						"AND kd = '$gkd_mapel'");
-	$r1 = mysql_fetch_assoc($q1);
+	$r1 = mysqli_fetch_assoc($q1);
 	$gpel = balikin($r1['mapel']);
 
 
 	//kelas
-	$q2 = mysql_query("SELECT * FROM m_kelas ".
+	$q2 = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 						"WHERE kd_member = '$swkd' ".
 						"AND kd = '$gkd_kelas'");
-	$r2 = mysql_fetch_assoc($q2);
+	$r2 = mysqli_fetch_assoc($q2);
 	$gkelas = balikin($r2['kelas']);
 	$gruang = balikin($r2['ruang']);
 
@@ -238,7 +238,7 @@ do
 	$sheet->getStyle('F'.$i_nox.'')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
 	$sheet->getStyle('F'.$i_nox.'')->applyFromArray( $style_data );
 	}
-while ($ruru = mysql_fetch_assoc($quru));
+while ($ruru = mysqli_fetch_assoc($quru));
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

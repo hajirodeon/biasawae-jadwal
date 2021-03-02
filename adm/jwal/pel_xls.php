@@ -20,18 +20,18 @@ $smtkd = nosql($_REQUEST['smtkd']);
 
 
 //terpilih
-$qtpx = mysql_query("SELECT * FROM m_tapel ".
+$qtpx = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd = '$tapelkd'");
-$rowtpx = mysql_fetch_assoc($qtpx);
+$rowtpx = mysqli_fetch_assoc($qtpx);
 $tpx_thn1 = nosql($rowtpx['tahun1']);
 $tpx_thn2 = nosql($rowtpx['tahun2']);
 $tapelnya = "$tpx_thn1/$tpx_thn2";
 
 
 //terpilih
-$qbtx = mysql_query("SELECT * FROM m_kelas ".
+$qbtx = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 						"WHERE kd = '$kelkd'");
-$rowbtx = mysql_fetch_assoc($qbtx);
+$rowbtx = mysqli_fetch_assoc($qbtx);
 $btxkd = nosql($rowbtx['kd']);
 $btxkelas = balikin($rowbtx['kelas']);
 $btxruang = balikin($rowbtx['ruang']);
@@ -41,9 +41,9 @@ $kelasnya = "$btxkelas-$btxruang";
 
 
 //terpilih
-$qbtx = mysql_query("SELECT * FROM m_smt ".
+$qbtx = mysqli_query($koneksi, "SELECT * FROM m_smt ".
 						"WHERE kd = '$smtkd'");
-$rowbtx = mysql_fetch_assoc($qbtx);
+$rowbtx = mysqli_fetch_assoc($qbtx);
 $btxkd = nosql($rowbtx['kd']);
 $btxno = nosql($rowbtx['no']);
 $btxsmt = balikin($rowbtx['smt']);
@@ -192,9 +192,9 @@ $sheet->getStyle('A5')->applyFromArray( $style_header );
 
 
 //hari
-$qhri = mysql_query("SELECT * FROM m_hari ".
+$qhri = mysqli_query($koneksi, "SELECT * FROM m_hari ".
 						"ORDER BY round(no) ASC");
-$rhri = mysql_fetch_assoc($qhri);
+$rhri = mysqli_fetch_assoc($qhri);
 
 do
 	{
@@ -209,7 +209,7 @@ do
 	$sheet->setCellValue(''.$hri_nox2.'5', ''.$hri_hr.'');
 	$sheet->getStyle(''.$hri_nox2.'5')->applyFromArray( $style_header );
 	}
-while ($rhri = mysql_fetch_assoc($qhri));
+while ($rhri = mysqli_fetch_assoc($qhri));
 
 
 
@@ -229,10 +229,10 @@ for ($k=1;$k<=12;$k++)
 
 
 //hari
-$qhri = mysql_query("SELECT * FROM m_hari ".
+$qhri = mysqli_query($koneksi, "SELECT * FROM m_hari ".
 						"ORDER BY round(no) ASC");
-$rhri = mysql_fetch_assoc($qhri);
-$thri = mysql_num_rows($qhri);
+$rhri = mysqli_fetch_assoc($qhri);
+$thri = mysqli_num_rows($qhri);
 
 do
 	{
@@ -254,11 +254,11 @@ do
 		
 		
 		//datane waktu
-		$qdte = mysql_query("SELECT * FROM m_waktu ".
+		$qdte = mysqli_query($koneksi, "SELECT * FROM m_waktu ".
 								"WHERE no_urut = '$k' ".
 								"AND kd_hari = '$hri_kd'");
-		$rdte = mysql_fetch_assoc($qdte);
-		$tdte = mysql_num_rows($qdte);
+		$rdte = mysqli_fetch_assoc($qdte);
+		$tdte = mysqli_num_rows($qdte);
 		$dte_jkd = balikin($rdte['kd_jam']);
 		$dte_waktu = balikin($rdte['waktu']);
 		$dte_ket = balikin($rdte['ket']);
@@ -278,32 +278,32 @@ do
 			{
 			//munculkan mapel gurunya...
 			//datane...
-			$qdte2 = mysql_query("SELECT jadwal.kd AS jdkd, jadwal.kd_guru_mapel AS gpkd ".
+			$qdte2 = mysqli_query($koneksi, "SELECT jadwal.kd AS jdkd, jadwal.kd_guru_mapel AS gpkd ".
 									"FROM jadwal ".
 									"WHERE jadwal.kd_tapel = '$tapelkd' ".
 									"AND jadwal.kd_smt = '$smtkd' ".
 									"AND jadwal.kd_kelas = '$kelkd' ".
 									"AND jadwal.kd_jam = '$dte_jkd' ".
 									"AND jadwal.kd_hari = '$hri_kd'");
-			$rdte2 = mysql_fetch_assoc($qdte2);
-			$tdte2 = mysql_num_rows($qdte2);
+			$rdte2 = mysqli_fetch_assoc($qdte2);
+			$tdte2 = mysqli_num_rows($qdte2);
 			$dte_kd = nosql($rdte2['jdkd']);
 			$dte_gpkd = nosql($rdte2['gpkd']);
 
 
 
 			//guru ne
-			$qku1 = mysql_query("SELECT * FROM m_guru_mapel ".
+			$qku1 = mysqli_query($koneksi, "SELECT * FROM m_guru_mapel ".
 									"WHERE kd = '$dte_gpkd'");
-			$rku1 = mysql_fetch_assoc($qku1);
+			$rku1 = mysqli_fetch_assoc($qku1);
 			$ku1_gurkd = nosql($rku1['kd_guru']);
 			$ku1_progkd = nosql($rku1['kd_mapel']);
 
 
 			//guru ne
-			$qku2 = mysql_query("SELECT * FROM m_guru ".
+			$qku2 = mysqli_query($koneksi, "SELECT * FROM m_guru ".
 									"WHERE kd = '$ku1_gurkd'");
-			$rku2 = mysql_fetch_assoc($qku2);
+			$rku2 = mysqli_fetch_assoc($qku2);
 			$ku2_kode = nosql($rku2['kode']);
 			$ku2_nip = balikin($rku2['nip']);
 			$ku2_nama = balikin($rku2['nama']);
@@ -311,9 +311,9 @@ do
 
 
 			//jam ke-
-			$qcc3 = mysql_query("SELECT * FROM m_jam ".
+			$qcc3 = mysqli_query($koneksi, "SELECT * FROM m_jam ".
 									"WHERE kd = '$dte_jkd'");
-			$rcc3 = mysql_fetch_assoc($qcc3);
+			$rcc3 = mysqli_fetch_assoc($qcc3);
 			$dte3_jam = nosql($rcc3['jam']);
 
 		
@@ -321,9 +321,9 @@ do
 		
 
 			//pddkn
-			$qcc2 = mysql_query("SELECT * FROM m_mapel ".
+			$qcc2 = mysqli_query($koneksi, "SELECT * FROM m_mapel ".
 									"WHERE kd = '$ku1_progkd'");
-			$rcc2 = mysql_fetch_assoc($qcc2);
+			$rcc2 = mysqli_fetch_assoc($qcc2);
 			$dte_kode = nosql($rcc2['kode']);
 			$dte_pel = balikin($rcc2['mapel']);
 
@@ -342,7 +342,7 @@ do
 	
 		}
 	}
-while ($rhri = mysql_fetch_assoc($qhri));
+while ($rhri = mysqli_fetch_assoc($qhri));
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

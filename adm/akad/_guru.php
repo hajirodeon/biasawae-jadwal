@@ -103,7 +103,7 @@ if ($_POST['btnHPS'])
 
 
 		//del
-		mysql_query("DELETE FROM m_guru ".
+		mysqli_query($koneksi, "DELETE FROM m_guru ".
 				"WHERE kd_tapel = '$tapelkd' ".
 				"AND kd_keahlian = '$keakd' ".
 				"AND kd_keahlian_kompetensi = '$kompkd' ".
@@ -139,11 +139,11 @@ if ($_POST['btnTBH'])
 	else
 		{
 		//daftar kelas
-		$qbt = mysql_query("SELECT * FROM m_kelas ".
+		$qbt = mysqli_query($koneksi, "SELECT * FROM m_kelas ".
 					"WHERE kelas LIKE '%$singk%' ".
 					"ORDER BY round(no) ASC, ".
 					"kelas ASC");
-		$rowbt = mysql_fetch_assoc($qbt);
+		$rowbt = mysqli_fetch_assoc($qbt);
 	
 		do
 			{
@@ -161,8 +161,8 @@ if ($_POST['btnTBH'])
 						"AND m_guru.kd_keahlian = '$keakd' ".
 						"AND m_guru.kd_keahlian_kompetensi = '$kompkd' ".
 						"AND m_guru.kd_kelas = '$btkd'");
-			$rcc = mysql_fetch_assoc($qcc);
-			$tcc = mysql_num_rows($qcc);
+			$rcc = mysqli_fetch_assoc($qcc);
+			$tcc = mysqli_num_rows($qcc);
 
 
 			//nek iya
@@ -174,13 +174,13 @@ if ($_POST['btnTBH'])
 			else
 				{
 				//query
-				mysql_query("INSERT INTO m_guru(kd, kd_tapel, kd_keahlian, kd_keahlian_kompetensi, ".
+				mysqli_query($koneksi, "INSERT INTO m_guru(kd, kd_tapel, kd_keahlian, kd_keahlian_kompetensi, ".
 						"kd_kelas, kd_pegawai) VALUES ".
 						"('$xyz', '$tapelkd', '$keakd', '$kompkd', ".
 						"'$btkd', '$pegawai')");
 				}
 			}
-		while ($rowbt = mysql_fetch_assoc($qbt));
+		while ($rowbt = mysqli_fetch_assoc($qbt));
 
 
 
@@ -224,19 +224,19 @@ Tahun Pelajaran : ';
 echo "<select name=\"tapel\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qtpx = mysql_query("SELECT * FROM m_tapel ".
+$qtpx = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd = '$tapelkd'");
-$rowtpx = mysql_fetch_assoc($qtpx);
+$rowtpx = mysqli_fetch_assoc($qtpx);
 $tpx_kd = nosql($rowtpx['kd']);
 $tpx_thn1 = nosql($rowtpx['tahun1']);
 $tpx_thn2 = nosql($rowtpx['tahun2']);
 
 echo '<option value="'.$tpx_kd.'">'.$tpx_thn1.'/'.$tpx_thn2.'</option>';
 
-$qtp = mysql_query("SELECT * FROM m_tapel ".
+$qtp = mysqli_query($koneksi, "SELECT * FROM m_tapel ".
 						"WHERE kd <> '$tapelkd' ".
 						"ORDER BY tahun1 ASC");
-$rowtp = mysql_fetch_assoc($qtp);
+$rowtp = mysqli_fetch_assoc($qtp);
 
 do
 	{
@@ -246,7 +246,7 @@ do
 
 	echo '<option value="'.$filenya.'?tapelkd='.$tpkd.'">'.$tpth1.'/'.$tpth2.'</option>';
 	}
-while ($rowtp = mysql_fetch_assoc($qtp));
+while ($rowtp = mysqli_fetch_assoc($qtp));
 
 echo '</select>,
 
@@ -254,18 +254,18 @@ Program Keahlian : ';
 echo "<select name=\"keahlian\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qkeax = mysql_query("SELECT * FROM m_keahlian ".
+$qkeax = mysqli_query($koneksi, "SELECT * FROM m_keahlian ".
 						"WHERE kd = '$keakd'");
-$rowkeax = mysql_fetch_assoc($qkeax);
+$rowkeax = mysqli_fetch_assoc($qkeax);
 $keax_kd = nosql($rowkeax['kd']);
 $keax_pro = balikin($rowkeax['program']);
 
 echo '<option value="'.$keax_kd.'">'.$keax_pro.'</option>';
 
-$qkea = mysql_query("SELECT * FROM m_keahlian ".
+$qkea = mysqli_query($koneksi, "SELECT * FROM m_keahlian ".
 			"WHERE kd <> '$keakd' ".
 			"ORDER BY program ASC");
-$rowkea = mysql_fetch_assoc($qkea);
+$rowkea = mysqli_fetch_assoc($qkea);
 
 do
 	{
@@ -274,7 +274,7 @@ do
 
 	echo '<option value="'.$filenya.'?tapelkd='.$tapelkd.'&keakd='.$kea_kd.'">'.$kea_pro.'</option>';
 	}
-while ($rowkea = mysql_fetch_assoc($qkea));
+while ($rowkea = mysqli_fetch_assoc($qkea));
 
 echo '</select>,
 
@@ -284,21 +284,21 @@ Kompetensi Keahlian : ';
 echo "<select name=\"kompetensi\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qkeax = mysql_query("SELECT * FROM m_keahlian_kompetensi ".
+$qkeax = mysqli_query($koneksi, "SELECT * FROM m_keahlian_kompetensi ".
 			"WHERE kd_keahlian = '$keakd' ".
 			"AND kd = '$kompkd'");
-$rowkeax = mysql_fetch_assoc($qkeax);
+$rowkeax = mysqli_fetch_assoc($qkeax);
 $keax_kd = nosql($rowkeax['kd']);
 $keax_pro = balikin($rowkeax['kompetensi']);
 $keax_singk = nosql($rowkeax['singkatan']);
 
 echo '<option value="'.$keax_kd.'">'.$keax_pro.'</option>';
 
-$qkea = mysql_query("SELECT * FROM m_keahlian_kompetensi ".
+$qkea = mysqli_query($koneksi, "SELECT * FROM m_keahlian_kompetensi ".
 			"WHERE kd_keahlian = '$keakd' ".
 			"AND kd <> '$kompkd' ".
 			"ORDER BY kompetensi ASC");
-$rowkea = mysql_fetch_assoc($qkea);
+$rowkea = mysqli_fetch_assoc($qkea);
 
 do
 	{
@@ -307,7 +307,7 @@ do
 
 	echo '<option value="'.$filenya.'?tapelkd='.$tapelkd.'&keakd='.$keakd.'&kompkd='.$kea_kd.'">'.$kea_pro.'</option>';
 	}
-while ($rowkea = mysql_fetch_assoc($qkea));
+while ($rowkea = mysqli_fetch_assoc($qkea));
 
 echo '</select>
 </td>
@@ -342,9 +342,9 @@ else
 	<option value="" selected>-Pegawai-</option>';
 
 	//data pegawai
-	$qpeg = mysql_query("SELECT * FROM m_pegawai ".
+	$qpeg = mysqli_query($koneksi, "SELECT * FROM m_pegawai ".
 				"ORDER BY nama ASC");
-	$rpeg = mysql_fetch_assoc($qpeg);
+	$rpeg = mysqli_fetch_assoc($qpeg);
 
 	do
 		{
@@ -354,7 +354,7 @@ else
 
 		echo '<option value="'.$peg_kd.'">'.$peg_nip.'. '.$peg_nm.'</option>';
 		}
-	while ($rpeg = mysql_fetch_assoc($qpeg));
+	while ($rpeg = mysqli_fetch_assoc($qpeg));
 
 
 	echo '</select>
@@ -378,12 +378,12 @@ else
 			"ORDER BY round(m_pegawai.nip) ASC";
 	$sqlresult = $sqlcount;
 
-	$count = mysql_num_rows(mysql_query($sqlcount));
+	$count = mysqli_num_rows(mysqli_query($sqlcount));
 	$pages = $p->findPages($count, $limit);
-	$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+	$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 	$target = $ke;
 	$pagelist = $p->pageList($_GET['page'], $pages, $target);
-	$data = mysql_fetch_array($result);
+	$data = mysqli_fetch_array($result);
 
 	if ($count != 0)
 		{
@@ -415,9 +415,9 @@ else
 
 
 			//detail e
-			$qku = mysql_query("SELECT nip, nama FROM m_pegawai ".
+			$qku = mysqli_query($koneksi, "SELECT nip, nama FROM m_pegawai ".
 						"WHERE kd = '$mpkd'");
-			$rku = mysql_fetch_assoc($qku);
+			$rku = mysqli_fetch_assoc($qku);
 			$nip = nosql($rku['nip']);
 			$nama = balikin($rku['nama']);
 
@@ -430,7 +430,7 @@ else
 			<td>'.$nama.'</td>
 			</tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 
 		echo '</table>
 		<table width="600" border="0" cellspacing="0" cellpadding="3">
